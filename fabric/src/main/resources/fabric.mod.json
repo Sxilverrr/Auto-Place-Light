@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "${id}",
+  "version": "${version}",
+  "name": "${name}",
+  "description": "Automatically place a light source from your inventory around you.",
+  "authors": [
+    "Sxilverr"
+  ],
+  "license": "CC0-1.0",
+  "icon": "assets/${id}/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.sxilverr.autoplacelight.fabric.AutoPlaceLightFabric"
+    ],
+    "modmenu": [
+      "com.sxilverr.autoplacelight.fabric.client.ModMenuIntegration"
+    ]
+  },
+  "depends": {
+    "minecraft": "${minecraft}",
+    "fabricloader": ">=0.15",
+    "java": ">=${java}",
+    "fabric-api": "*",
+    "cloth-config": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}
