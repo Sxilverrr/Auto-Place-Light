@@ -1,0 +1,27 @@
+modLoader = "javafml"
+loaderVersion = "*"
+license = "CC0-1.0"
+
+[[mods]]
+modId = "${id}"
+version = "${version}"
+displayName = "${name}"
+authors = "Sxilverr"
+description = "Automatically place a light source from your inventory around you."
+logoFile = "assets/${id}/icon.png"
+logoBlur = false
+displayTest = "IGNORE_ALL_VERSION"
+
+[[dependencies.${id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft}"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.${id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "${loader}"
+ordering = "NONE"
+side = "CLIENT"

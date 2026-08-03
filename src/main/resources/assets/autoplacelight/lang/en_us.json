@@ -1,0 +1,6 @@
+{
+  "key.categories.autoplacelight": "Auto Place Light",
+  "key.autoplacelight.toggle": "Toggle Auto Place Light",
+  "message.autoplacelight.enabled": "Auto Place Light: ON",
+  "message.autoplacelight.disabled": "Auto Place Light: OFF"
+}
