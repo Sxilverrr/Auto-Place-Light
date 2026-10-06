@@ -1,13 +1,8 @@
 package com.sxilverr.autoplacelight;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
@@ -53,69 +48,26 @@ public final class Settings {
     }
 
     public static boolean isPlaceEntry(Object value) {
-        return value instanceof String entry && !entry.isEmpty() && ENTRY_FORMAT.matcher(entry).matches();
+        return value instanceof String entry && ENTRY_FORMAT.matcher(entry).matches();
     }
 
     public static boolean isPlaceable(ItemStack stack) {
-        for (Predicate<ItemStack> rule : rules()) {
-            if (rule.test(stack)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static List<Predicate<ItemStack>> rules() {
         if (!placeItemIds.equals(resolvedFrom)) {
             resolvedFrom = List.copyOf(placeItemIds);
-            List<Predicate<ItemStack>> built = new ArrayList<>();
-            for (String entry : placeItemIds) {
-                Predicate<ItemStack> rule = compile(entry);
-                if (rule != null) {
-                    built.add(rule);
-                }
-            }
-            rules = List.copyOf(built);
+            rules = resolvedFrom.stream().filter(Settings::isPlaceEntry).map(Settings::compile).toList();
         }
-        return rules;
+        return rules.stream().anyMatch(rule -> rule.test(stack));
     }
 
     private static Predicate<ItemStack> compile(String entry) {
         boolean tag = entry.startsWith("#");
         String id = (tag ? entry.substring(1) : entry).toLowerCase(Locale.ROOT);
-        if (id.isEmpty()) {
-            return null;
+        if (id.indexOf(':') < 0 && id.indexOf('*') < 0) {
+            id = "minecraft:" + id;
         }
-
-        if (id.indexOf('*') >= 0) {
-            Pattern pattern = Pattern.compile(wildcard(id));
-            return tag
-                    ? stack -> stack.getTags().anyMatch(key -> pattern.matcher(key.location().toString()).matches())
-                    : stack -> pattern.matcher(idOf(stack).toString()).matches();
-        }
-
-        ResourceLocation key = ResourceLocation.tryParse(id);
-        if (key == null) {
-            return null;
-        }
-        if (tag) {
-            TagKey<Item> tagKey = TagKey.create(Registries.ITEM, key);
-            return stack -> stack.is(tagKey);
-        }
-        return stack -> key.equals(idOf(stack));
-    }
-
-    private static String wildcard(String id) {
-        StringBuilder regex = new StringBuilder();
-        int start = 0;
-        for (int star = id.indexOf('*'); star >= 0; star = id.indexOf('*', start)) {
-            regex.append(Pattern.quote(id.substring(start, star))).append(".*");
-            start = star + 1;
-        }
-        return regex.append(Pattern.quote(id.substring(start))).toString();
-    }
-
-    private static ResourceLocation idOf(ItemStack stack) {
-        return BuiltInRegistries.ITEM.getKey(stack.getItem());
+        Pattern pattern = Pattern.compile(id.replace(".", "\\.").replace("*", ".*"));
+        return tag
+                ? stack -> stack.getTags().anyMatch(key -> pattern.matcher(key.location().toString()).matches())
+                : stack -> pattern.matcher(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString()).matches();
     }
 }

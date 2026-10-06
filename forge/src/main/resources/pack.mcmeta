@@ -1,6 +1,6 @@
 {
   "pack": {
-    "description": "${name}",
-    "pack_format": ${pack_format}
+    "description": "Auto Place Light",
+    "pack_format": 15
   }
 }

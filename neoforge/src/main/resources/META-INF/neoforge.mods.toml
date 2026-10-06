@@ -22,6 +22,6 @@ side = "CLIENT"
 [[dependencies.${id}]]
 modId = "neoforge"
 type = "required"
-versionRange = "${loader}"
+versionRange = "*"
 ordering = "NONE"
 side = "CLIENT"

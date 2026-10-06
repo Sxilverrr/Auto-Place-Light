@@ -15,13 +15,12 @@
       "com.sxilverr.autoplacelight.fabric.AutoPlaceLightFabric"
     ],
     "modmenu": [
-      "com.sxilverr.autoplacelight.fabric.client.ModMenuIntegration"
+      "com.sxilverr.autoplacelight.fabric.ModMenuIntegration"
     ]
   },
   "depends": {
     "minecraft": "${minecraft}",
     "fabricloader": ">=0.15",
-    "java": ">=${java}",
     "fabric-api": "*",
     "cloth-config": "*"
   },
